@@ -39,6 +39,8 @@
             <p class="text-danger" id="failRePassword"></p>
         </div>
     </div>
+    <div class="text-center"><button type="button" onclick="submitData()" class="btn btn-info submitData">Submit</button></div>
+
 </div>
 <script src="register.js"></script>
 <!--Code HTML-->
@@ -47,30 +49,71 @@
     let emailInput = document.querySelector("#inputEmail");
     let passwordInput = document.querySelector("#inputPassword");
     let rePasswordInput = document.querySelector("#inputRePassword");
+    let submit = document.querySelector(".submitData")
+    let ischeck;
+    let user ;
+    let arr = JSON.parse(localStorage.getItem("listUser"));
+    if(arr==null){
+        arr = [];
+    }
     function validate() {
+        let check = true;
         let username = userNameInput.value;
         let email = emailInput.value;
         let password = passwordInput.value;
         let rePassword = rePasswordInput.value;
-        const EMAIL_PATTERN =  /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-        console.log(EMAIL_PATTERN.test(email))
+        const EMAIL_PATTERN =/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+
         if (username.trim()==''){
             // console.log("username --" +username)
             document.querySelector("#failUserName").innerText = "Khong duoc de trong !";
+            check = false;
         }else if(username.length <6){
             document.querySelector("#failUserName").innerText = "Ten dang nhap phai it nhat 6 ki tu !";
+            check = false;
         }else {
             document.querySelector("#failUserName").innerText = "";
         }
         if (email.trim() == ''){
             document.querySelector("#failEmail").innerText = "Khong duoc de trong !";
+            check = false;
         }else if(!EMAIL_PATTERN.test(email)){
             document.querySelector("#failEmail").innerText = "Email khong dung dinh dang !";
+            check = false;
         }else {
             document.querySelector("#failEmail").innerText = "";
         }
-
-
+        if (password.trim()==''){
+            console.log('null')
+            document.querySelector("#failPassword").innerText = "Khong duoc de trong !";
+            check = false;
+        }else if(password.length <8){
+            document.querySelector("#failPassword").innerText = "Mat khau phai it nhat 8 ki tu !";
+            check = false;
+        }else {
+            document.querySelector("#failPassword").innerText = "";
+        }
+        if (rePassword !== password){
+            document.querySelector("#failRePassword").innerText = "Mat khong trung khop";
+            check = false;
+        }
+        else {
+            document.querySelector("#failRePassword").innerText ="";
+        }
+        console.log("check ---"+check)
+        if (check){
+            ischeck = true;
+            user = new User(username,email,password)
+        }else {
+           ischeck = false;
+        }
+    }
+    // kieemr tra validate
+    //ham submitData
+    function submitData() {
+        if(ischeck){
+            localStorage.setItem('user',JSON.stringify(user));
+        }
     }
 
 </script>
