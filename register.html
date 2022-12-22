@@ -56,6 +56,7 @@
     if(arr==null){
         arr = [];
     }
+    console.log(arr)
     function validate() {
         let check = true;
         let username = userNameInput.value;
@@ -71,6 +72,9 @@
         }else if(username.length <6){
             document.querySelector("#failUserName").innerText = "Ten dang nhap phai it nhat 6 ki tu !";
             check = false;
+        }else if (checkUsernameExist(username)){
+            document.querySelector("#failUserName").innerText = "Ten dang nhap da ton tai, vui long dat ten khac !";
+            check = false;
         }else {
             document.querySelector("#failUserName").innerText = "";
         }
@@ -80,11 +84,14 @@
         }else if(!EMAIL_PATTERN.test(email)){
             document.querySelector("#failEmail").innerText = "Email khong dung dinh dang !";
             check = false;
+        }else if (checkEmailExist(email)){
+            document.querySelector("#failEmail").innerText = "Email da ton tai !";
+            check=false;
         }else {
             document.querySelector("#failEmail").innerText = "";
         }
         if (password.trim()==''){
-            console.log('null')
+            // console.log('null')
             document.querySelector("#failPassword").innerText = "Khong duoc de trong !";
             check = false;
         }else if(password.length <8){
@@ -100,7 +107,7 @@
         else {
             document.querySelector("#failRePassword").innerText ="";
         }
-        console.log("check ---"+check)
+        // console.log("check ---"+check)
         if (check){
             ischeck = true;
             user = new User(username,email,password)
@@ -112,8 +119,27 @@
     //ham submitData
     function submitData() {
         if(ischeck){
-            localStorage.setItem('user',JSON.stringify(user));
+            arr.push(user);
+            localStorage.setItem('listUser',JSON.stringify(arr));
+            location.href= "home.html";
         }
+    }
+    function checkUsernameExist(userNameCheck){
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].username===userNameCheck){
+                return true
+                break;
+            }
+        }
+        return  false;
+    }
+    function checkEmailExist(email) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].email == email){
+                return true;
+            }
+        }
+        return false;
     }
 
 </script>
